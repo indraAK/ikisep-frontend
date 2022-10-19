@@ -1,6 +1,12 @@
-# ikisep
+# ikiSep
 
-This template should help get you started developing with Vue 3 in Vite.
+ikiSep adalah aplikasi / platform berbasis web yang menyediakan berbagai macam resep masakan - Dibuat menggunakan Vue.js.
+
+![screenshot](https://i.ibb.co/N25byRd/ikisep-homepage.jpg)
+
+## Demo
+
+[ikiSep Website](https://ikisep-frontend.herokuapp.com/)
 
 ## Recommended IDE Setup
 
