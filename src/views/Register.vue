@@ -45,25 +45,28 @@ const handleSubmit = async () => {
 <template>
   <section class="container mx-auto px-4 mt-12">
     <form @submit.prevent="handleSubmit" class="bg-white px-6 py-8 shadow-lg rounded-lg max-w-md mx-auto">
-      <h2 class="text-2xl text-slate-800 font-bold mb-4">Daftar</h2>
+      <h2 class="text-2xl text-slate-800 font-bold mb-4" data-testid="form-title">Daftar</h2>
       <div class="form-control w-full">
         <label class="label">Username</label>
-        <input v-model="username" type="text" placeholder="Masukkan Username" class="input input-bordered w-full" />
+        <input v-model="username" type="text" placeholder="Masukkan Username" class="input input-bordered w-full"
+          data-testid="username" />
       </div>
       <div class="form-control w-full">
         <label class="label">Email</label>
-        <input v-model="email" type="email" placeholder="Masukkan email" class="input input-bordered w-full" />
+        <input v-model="email" type="email" placeholder="Masukkan email" class="input input-bordered w-full"
+          data-testid="email" />
       </div>
       <div class="form-control w-full mt-3">
         <label class="label">Password</label>
-        <input v-model="password" type="password" placeholder="Masukkan password" class="input input-bordered w-full" />
+        <input v-model="password" type="password" placeholder="Masukkan password" class="input input-bordered w-full"
+          data-testid="password" />
       </div>
       <div class="form-control w-full mt-3">
         <label class="label">Konfirmasi Password</label>
         <input v-model="confirm_password" type="password" placeholder="Masukkan ulang password"
-          class="input input-bordered w-full" />
+          class="input input-bordered w-full" data-testid="confirm-password" />
       </div>
-      <button class="btn btn-primary mt-6 w-full" type="submit">Daftar</button>
+      <button class="btn btn-primary mt-6 w-full" type="submit" data-testid="daftar">Daftar</button>
       <div class="text-center mt-6">
         <p class="text-sm">Sudah punya akun? <RouterLink to="/login" class="text-green-primary font-medium">Masuk
           </RouterLink>
