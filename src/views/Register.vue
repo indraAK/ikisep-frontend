@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router"
 import router from "../router";
+import Navbar from "@/components/Navbar.vue"
 
 const username = ref('')
 const email = ref('')
@@ -43,8 +44,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <section class="container mx-auto px-4 mt-12">
-    <form @submit.prevent="handleSubmit" class="bg-white px-6 py-8 shadow-lg rounded-lg max-w-md mx-auto">
+  <Navbar />
+  <section class="container mx-auto px-4 mt-12 pb-6">
+    <form @submit.prevent="handleSubmit" class="card px-6 py-8 shadow-lg rounded-lg max-w-md mx-auto">
       <h2 class="text-2xl text-slate-800 font-bold mb-4" data-testid="form-title">Daftar</h2>
       <div class="form-control w-full">
         <label class="label">Username</label>

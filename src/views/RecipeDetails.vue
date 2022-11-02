@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { useFetch } from '@vueuse/core'
+import Navbar from "@/components/Navbar.vue"
 import Spinner from "@/components/Spinner.vue"
 
 const { params: { id } } = useRoute()
@@ -8,6 +9,7 @@ const { isFetching, error, data } = useFetch(`${import.meta.env.VITE_API_URL}/re
 </script>
 
 <template>
+  <Navbar />
   <main class="container max-w-5xl mx-auto px-4 mt-10 mb-12">
     <div v-if="isFetching">
       <Spinner />

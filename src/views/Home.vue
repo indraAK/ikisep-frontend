@@ -3,13 +3,15 @@ import { ref } from 'vue';
 import { onClickOutside, useFetch } from '@vueuse/core'
 import Spinner from "@/components/Spinner.vue"
 import RecipeCard from "@/components/RecipeCard.vue"
+import Navbar from "@/components/Navbar.vue"
+import router from '../router';
 
-const { isFetching, error, data } = useFetch(`${import.meta.env.VITE_API_URL}/recipes`).get().json()
-
+const { isFetching, data } = useFetch(`${import.meta.env.VITE_API_URL}/recipes`).get().json()
 const dropdownRef = ref(null)
 const isMenuFilterOpen = ref(false)
 const dropdownMenus = ref(['Terbaru', 'Banyak Disukai', 'Mudah', 'Sedang', 'Sulit'])
 const selectedMenu = ref(dropdownMenus.value[0])
+const query = ref('')
 
 onClickOutside(dropdownRef, () => isMenuFilterOpen.value = false)
 
@@ -18,9 +20,14 @@ const handleClickDropdownItem = (menu) => {
   isMenuFilterOpen.value = false
 }
 
+const handleSearch = () => {
+  router.push({ name: 'searchResults', query: { name: query.value } })
+}
+
 </script>
 
 <template>
+  <Navbar />
   <!-- Hero -->
   <section
     class="hero-section p-4 min-h-[75vh] bg-[url('@/assets/bg-hero.jpg')] bg-cover bg-center relative isolate text-white grid content-center justify-center text-center">
@@ -34,12 +41,13 @@ const handleClickDropdownItem = (menu) => {
 
   <!-- Form Search Recipe -->
   <section class="p-4 max-w-xl mx-auto -translate-y-1/2">
-    <form class="bg-white p-8 shadow-md rounded-xl">
+    <form @submit.prevent="handleSearch" class="bg-white p-8 shadow-md rounded-xl">
       <label for="keyword" class=" text-slate-700 font-medium">Mau masak apa hari ini?</label>
       <div class="flex gap-2 mt-3">
         <div class="relative flex-1">
-          <input type="text" placeholder="Cari resep..."
-            class="w-full p-3 py-2.5 rounded border border-gray-300 text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-75">
+          <input v-model="query" type="text" placeholder="Cari resep..."
+            class="w-full p-3 py-2.5 rounded border border-gray-300 text-slate-700 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-75"
+            data-testid="keyword">
           <span class="block absolute top-1/2 right-3 -translate-y-1/2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="w-6 h-6 text-gray-400">
@@ -49,7 +57,8 @@ const handleClickDropdownItem = (menu) => {
           </span>
         </div>
         <button
-          class="inline-flex items-center justify-center align-middle whitespace-nowrap px-6 py-2 bg-green-primary text-white font-medium text-base rounded hover:bg-green-primary/90">Cari</button>
+          class="inline-flex items-center justify-center align-middle whitespace-nowrap px-6 py-2 bg-green-primary text-white font-medium text-base rounded hover:bg-green-primary/90"
+          data-testid="search-btn">Cari</button>
       </div>
     </form>
   </section>
@@ -59,7 +68,7 @@ const handleClickDropdownItem = (menu) => {
     <div class="relative">
       <button id="menuFilterBtn" @click="isMenuFilterOpen = !isMenuFilterOpen"
         class="inline-flex items-center justify-center align-middle gap-2 whitespace-nowrap px-4 py-2 bg-gray-100 text-gray-600 text-base rounded hover:bg-gray-200/70">
-        {{selectedMenu}}
+        {{ selectedMenu }}
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-5 h-5">
@@ -72,7 +81,9 @@ const handleClickDropdownItem = (menu) => {
         class="absolute top-full right-0 w-auto mt-2 bg-white shadow-lg rounded z-50">
         <li v-for="menu in dropdownMenus" :key="menu">
           <button @click="handleClickDropdownItem(menu)"
-            class="inline-flex w-full items-center align-middle px-4 py-2.5 whitespace-nowrap text-sm hover:bg-slate-100 text-slate-700">{{menu}}</button>
+            class="inline-flex w-full items-center align-middle px-4 py-2.5 whitespace-nowrap text-sm hover:bg-slate-100 text-slate-700">{{
+                menu
+            }}</button>
         </li>
       </ul>
     </div>
