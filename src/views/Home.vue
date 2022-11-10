@@ -12,6 +12,7 @@ const isMenuFilterOpen = ref(false)
 const dropdownMenus = ref(['Terbaru', 'Banyak Disukai', 'Mudah', 'Sedang', 'Sulit'])
 const selectedMenu = ref(dropdownMenus.value[0])
 const query = ref('')
+const page = ref(1)
 
 onClickOutside(dropdownRef, () => isMenuFilterOpen.value = false)
 
@@ -22,6 +23,24 @@ const handleClickDropdownItem = (menu) => {
 
 const handleSearch = () => {
   router.push({ name: 'searchResults', query: { name: query.value } })
+}
+
+const loadMore = async () => {
+  isFetching.value = true
+  page.value += 1
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/recipes?page=${page.value}`)
+    if (!res.ok) throw new Error(res.statusText)
+    const json = await res.json()
+    data.value.data = [...data.value?.data, ...json.data]
+    data.value.meta = { ...json.meta }
+    console.log(data)
+  } catch (error) {
+    console.log(error.message)
+  } finally {
+    isFetching.value = false
+  }
 }
 
 </script>
@@ -99,8 +118,8 @@ const handleSearch = () => {
       <RecipeCard v-for="recipe in data.data" :key="recipe.id" :recipe="recipe" />
     </div>
 
-    <button v-if="data"
-      class="flex mx-auto mt-12 items-center justify-center align-middle whitespace-nowrap px-6 py-3 bg-green-primary/5 text-green-primary font-medium text-base rounded-full hover:bg-green-primary/10">Lihat
+    <button v-if="data && data?.meta.page < data?.meta.total_page" @click="loadMore" :disabled="isFetching"
+      class="flex mx-auto mt-12 items-center justify-center align-middle whitespace-nowrap px-6 py-3 bg-green-primary/5 text-green-primary font-medium text-base rounded-full hover:bg-green-primary/10 disabled:opacity-70">Lihat
       Lainnya</button>
   </section>
 

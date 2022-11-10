@@ -12,7 +12,7 @@ const formData = ref({
   nama_resep: '',
   image_url: null,
   waktu_pembuatan: '',
-  tingkat_kesulitan: 'Mudah',
+  tingkat_kesulitan: '',
   porsi: '',
   bahan: '',
   cara_masak: ''
@@ -24,11 +24,11 @@ const handleFileChange = (event) => {
   if (event.target.files.length === 0) return;
 
   imageFile.value = event.target.files[0]
-  URL.revokeObjectURL(blobImageurl.value)
+  URL.revokeObjectURL(imageFile.value)
   blobImageurl.value = URL.createObjectURL(imageFile.value)
 }
 
-const handleSubmit = async (event) => {
+const handleSubmit = async () => {
   isFetching.value = true;
 
   const { data } = await supabase.storage
@@ -41,7 +41,14 @@ const handleSubmit = async (event) => {
   formData.value.user_id = user.id;
 
   await addNewRecipe()
-  event.target.reset()
+  imageFile.value = null;
+  formData.value.nama_resep = ''
+  formData.value.image_url = null
+  formData.value.waktu_pembuatan = ''
+  formData.value.tingkat_kesulitan = ''
+  formData.value.porsi = ''
+  formData.value.bahan = ''
+  formData.value.cara_masak = ''
 }
 </script>
 
@@ -84,7 +91,6 @@ const handleSubmit = async (event) => {
           <label for="tingkat_kesulitan" class="text-slate-700 font-medium text-sm">Tingkat kesulitan</label>
           <select v-model="formData['tingkat_kesulitan']"
             class="select select-bordered w-full h-auto py-2.5 block mt-2">
-            <option disabled selected value="level">Tingkat kesulitan</option>
             <option value="Mudah">Mudah</option>
             <option value="Sedang">Sedang</option>
             <option value="Sulit">Sulit</option>

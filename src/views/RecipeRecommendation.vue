@@ -5,7 +5,6 @@ import Spinner from "@/components/Spinner.vue"
 import RecipeCard from "@/components/RecipeCard.vue"
 
 const { isFetching, data, error } = useFetch(`${import.meta.env.VITE_API_URL}/recipes/recommendation`).get().json();
-console.log(data)
 </script>
 
 <template>

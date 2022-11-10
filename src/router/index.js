@@ -8,6 +8,7 @@ import RecipeRecommendation from "@/views/RecipeRecommendation.vue";
 import Event from "@/views/Event.vue";
 import NotFound from "@/views/NotFound.vue";
 import CreateRecipe from "@/views/CreateRecipe.vue";
+import MyRecipes from "@/views/MyRecipes.vue";
 import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
@@ -29,7 +30,7 @@ const router = createRouter({
       component: Register,
     },
     {
-      path: "/recipe/:id",
+      path: "/recipes/:id",
       name: "recipeDetail",
       component: RecipeDetails,
     },
@@ -50,9 +51,16 @@ const router = createRouter({
       component: Event,
     },
     {
-      path: "/create",
+      path: "/recipes/new",
       name: "recipeNew",
       component: CreateRecipe,
+      meta: { requireAuth: true },
+    },
+    {
+      path: "/my-recipes",
+      name: "myRecipes",
+      component: MyRecipes,
+      meta: { requireAuth: true },
     },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   ],
@@ -60,6 +68,14 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const { user } = useUserStore();
+
+  if (to.meta.requireAuth && !user) {
+    return {
+      path: "/login",
+      // save the location we were at to come back later
+      // query: { redirect: to.fullPath },
+    };
+  }
 
   if (user && (to.name === "login" || to.name === "register")) {
     return { name: "home" };
